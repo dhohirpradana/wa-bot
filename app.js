@@ -104,11 +104,6 @@ client.on("message", async (message) => {
     // do something with the media data here
   }
 
-  //change the value in the in-memory object
-  // content.val1 = 42;
-  //Serialize as JSON and Write it to a file
-  // fs.writeFileSync(filename, JSON.stringify(content));
-
   for (const [key, value] of Object.entries(cmdRes)) {
     if (message?.body.toLowerCase() == "!" + key) {
       message.reply(value);
@@ -118,10 +113,30 @@ client.on("message", async (message) => {
   var msgFirst = message.body.substring(0, message.body.indexOf(" "));
   var msgNFirst = message.body.substring(message.body.indexOf(" ") + 1);
 
+  if (msgFirst == "!set") {
+    if (!msgNFirst.includes("=>")) {
+      message.reply("Invalid format");
+      return;
+    }
+    message.reply(`Command set successfully`);
+    message.react("✅");
+
+    var cmd = msgNFirst.substring(0, msgNFirst.indexOf("=>"));
+    var res = msgNFirst.substring(msgNFirst.indexOf("=>") + 2);
+
+    cmdRes[cmd] = res;
+    fs.writeFile("cmdRes.json", JSON.stringify(cmdRes), (err) => {
+      if (err) throw err;
+      console.log("Data written to file");
+    });
+    return;
+  }
+
   if (msgFirst == "!calc") {
     var res = calculate(msgNFirst);
-    message.reply(`result => ${res}`);
-    return message.react("🔢");
+    message.reply(`Result => ${res}`);
+    message.react("🔢");
+    return;
   }
 
   if (msgFirst == "!wikipedia") {
@@ -134,7 +149,7 @@ client.on("message", async (message) => {
         var desc = res.data.query.search[0].snippet;
         var url =
           "https://id.wikipedia.org/?curid=" + res.data.query.search[0].pageid;
-        message.reply(`baca disini ${url}`);
+        message.reply(`Baca disini ${url}`);
       })
       .catch((err) => {
         console.log("Error: ", err.message);
