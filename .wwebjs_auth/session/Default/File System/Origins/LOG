@@ -1,2 +1,3 @@
-2022/10/13-10:35:24.622 8d03 Creating DB /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/File System/Origins since it was missing.
-2022/10/13-10:35:24.661 8d03 Reusing MANIFEST /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/File System/Origins/MANIFEST-000001
+2022/10/13-12:21:15.017 4003 Reusing MANIFEST /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/File System/Origins/MANIFEST-000001
+2022/10/13-12:21:15.017 4003 Recovering log #3
+2022/10/13-12:21:15.017 4003 Reusing old log /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/File System/Origins/000003.log 
