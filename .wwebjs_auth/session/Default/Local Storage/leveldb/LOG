@@ -1,3 +1,2 @@
-2022/10/12-18:26:08.499 14f03 Reusing MANIFEST /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/Local Storage/leveldb/MANIFEST-000001
-2022/10/12-18:26:08.501 14f03 Recovering log #3
-2022/10/12-18:26:08.502 14f03 Reusing old log /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/Local Storage/leveldb/000003.log 
+2022/10/13-10:35:21.118 8d03 Creating DB /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/Local Storage/leveldb since it was missing.
+2022/10/13-10:35:21.206 8d03 Reusing MANIFEST /Users/dhohirpradana/Documents/Node/wa-bot/.wwebjs_auth/session/Default/Local Storage/leveldb/MANIFEST-000001
