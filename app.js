@@ -35,7 +35,7 @@ client.on("message", async (message) => {
   }
 
   if (message.body.toLowerCase() === "!hello") {
-    message.reply("Hiiiii Bro");
+    message.reply("Hello bro");
   }
 
   if (message.body.toLowerCase() === "!meme") {
