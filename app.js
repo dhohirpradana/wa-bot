@@ -146,6 +146,8 @@ const matchSkipAuthors = (author) => {
 
 client.on("message", async (message) => {
   console.log(message);
+  var msgFirst = message.body.substring(0, message.body.indexOf(" "));
+  var msgNFirst = message.body.substring(message.body.indexOf(" ") + 1);
   // let chat = await message.getChat();
   // chat.sendSeen();
 
@@ -153,6 +155,22 @@ client.on("message", async (message) => {
   if (matchSkipAuthors(message.author)) {
     console.log("skip author");
     return;
+  }
+
+  // skip if msgFirst is not a command
+  if (!msgFirst.contains("!rm")) {
+    // skip words
+    if (matchSkipWords(message.body)) {
+      console.log("skip");
+      return;
+    }
+
+    // block bad words
+    if (matchBadWords(message.body)) {
+      console.log("bad word found");
+      message.reply("bad word found");
+      return;
+    }
   }
 
   // cmd add skip author
@@ -167,6 +185,7 @@ client.on("message", async (message) => {
         console.log("skipAuthors saved");
       }
     );
+    message.reply("skip author added");
     return;
   }
 
@@ -182,20 +201,7 @@ client.on("message", async (message) => {
         console.log("skipAuthors saved");
       }
     );
-    message.reply("skipAuthors saved");
-    return;
-  }
-
-  // skip words
-  if (matchSkipWords(message.body)) {
-    console.log("skip");
-    return;
-  }
-
-  // block bad words
-  if (matchBadWords(message.body)) {
-    console.log("bad word found");
-    message.reply("bad word found");
+    message.reply("skipAuthors removed", msgSecond);
     return;
   }
 
@@ -210,8 +216,6 @@ client.on("message", async (message) => {
       break;
     }
   }
-  var msgFirst = message.body.substring(0, message.body.indexOf(" "));
-  var msgNFirst = message.body.substring(message.body.indexOf(" ") + 1);
 
   // cmd add skip word
   if (msgFirst == "!addskip") {
