@@ -384,5 +384,5 @@ client.on("message", async (message) => {
       });
   }
 
-  message.react("👍");
+  message.react("✔️");
 });
