@@ -51,6 +51,13 @@ fs.readFile("skipWords.json", (err, data) => {
   console.log("skipWords", skipWords.length);
 });
 
+let skipAuthors;
+fs.readFile("skipAuthors.json", (err, data) => {
+  if (err) throw err;
+  skipAuthors = JSON.parse(data);
+  console.log("skipAuthors", skipAuthors.length);
+});
+
 // calc
 function calculate(input) {
   var f = {
@@ -130,10 +137,54 @@ const matchSkipWords = (msg) => {
   });
 };
 
+const matchSkipAuthors = (author) => {
+  return !!skipAuthors.some((word) => {
+    const regex = new RegExp(word, "i");
+    return regex.test(author);
+  });
+};
+
 client.on("message", async (message) => {
   console.log(message);
   // let chat = await message.getChat();
   // chat.sendSeen();
+
+  // skip authors
+  if (matchSkipAuthors(message.author)) {
+    console.log("skip author");
+    return;
+  }
+
+  // cmd add skip author
+  if (msgFirst == "!addskipauthor") {
+    skipAuthors.push(msgSecond);
+    fs.writeFile(
+      "skipAuthors.json",
+      JSON.stringify(skipAuthors),
+      "utf8",
+      function (err) {
+        if (err) throw err;
+        console.log("skipAuthors saved");
+      }
+    );
+    return;
+  }
+
+  // cmd remove skip author
+  if (msgFirst == "!rmskipauthor") {
+    skipAuthors = skipAuthors.filter((item) => item !== msgSecond);
+    fs.writeFile(
+      "skipAuthors.json",
+      JSON.stringify(skipAuthors),
+      "utf8",
+      function (err) {
+        if (err) throw err;
+        console.log("skipAuthors saved");
+      }
+    );
+    message.reply("skipAuthors saved");
+    return;
+  }
 
   // skip words
   if (matchSkipWords(message.body)) {
@@ -144,7 +195,7 @@ client.on("message", async (message) => {
   // block bad words
   if (matchBadWords(message.body)) {
     console.log("bad word found");
-    // nothing todo
+    message.reply("bad word found");
     return;
   }
 
