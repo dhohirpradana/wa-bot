@@ -23,11 +23,32 @@ client.on("ready", () => {
   console.log("Client is ready!");
 });
 
+let cmdPasswd;
+fs.readFile("cmdPassword.txt", "utf8", function (err, data) {
+  if (err) throw err;
+  console.log(data.length);
+  cmdPasswd = data;
+});
+
 let cmdRes;
 fs.readFile("cmdRes.json", (err, data) => {
   if (err) throw err;
   cmdRes = JSON.parse(data);
   console.log("cmdRes", cmdRes);
+});
+
+let badWords;
+fs.readFile("badWords.json", (err, data) => {
+  if (err) throw err;
+  badWords = JSON.parse(data);
+  console.log("badWords", badWords.length);
+});
+
+let skipWords;
+fs.readFile("skipWords.json", (err, data) => {
+  if (err) throw err;
+  skipWords = JSON.parse(data);
+  console.log("skipWords", skipWords.length);
 });
 
 // calc
@@ -95,10 +116,37 @@ function calculate(input) {
   }
 }
 
+const matchBadWords = (msg) => {
+  return !!badWords.some((word) => {
+    const regex = new RegExp(word, "i");
+    return regex.test(msg);
+  });
+};
+
+const matchSkipWords = (msg) => {
+  return !!skipWords.some((word) => {
+    const regex = new RegExp(word, "i");
+    return regex.test(msg);
+  });
+};
+
 client.on("message", async (message) => {
   console.log(message);
-  let chat = await message.getChat();
+  // let chat = await message.getChat();
   // chat.sendSeen();
+
+  // skip words
+  if (matchSkipWords(message.body)) {
+    console.log("skip");
+    return;
+  }
+
+  // block bad words
+  if (matchBadWords(message.body)) {
+    console.log("bad word found");
+    // nothing todo
+    return;
+  }
 
   if (message.hasMedia) {
     const media = await message.downloadMedia();
@@ -114,10 +162,67 @@ client.on("message", async (message) => {
   var msgFirst = message.body.substring(0, message.body.indexOf(" "));
   var msgNFirst = message.body.substring(message.body.indexOf(" ") + 1);
 
+  // cmd add skip word
+  if (msgFirst == "!addskip") {
+    skipWords.push(msgNFirst);
+    fs.writeFile("skipWords.json", JSON.stringify(skipWords), (err) => {
+      if (err) throw err;
+      console.log("skipWords.json updated");
+    });
+    message.reply("skip word added");
+  }
+
+  // cmd add bad word
+  if (msgFirst == "!addbad") {
+    badWords.push(msgNFirst);
+    fs.writeFile("badWords.json", JSON.stringify(badWords), (err) => {
+      if (err) throw err;
+      console.log("badWords.json updated");
+    });
+    message.reply("bad word added");
+  }
+
+  // remove skip word using cmdPassword
+  if (msgFirst == "!rmskip") {
+    if (!msgNFirst.includes(cmdPasswd)) {
+      message.reply("wrong password");
+      return;
+    }
+    const word = msgNFirst.replace(cmdPasswd, "");
+    const index = skipWords.indexOf(word);
+    if (index > -1) {
+      skipWords.splice(index, 1);
+    }
+    fs.writeFile("skipWords.json", JSON.stringify(skipWords), (err) => {
+      if (err) throw err;
+      console.log("skipWords.json updated");
+    });
+    message.reply("skip word removed");
+  }
+
+  // remove bad word using cmdPassword
+  if (msgFirst == "!rmbad") {
+    if (!msgNFirst.includes(cmdPasswd)) {
+      message.reply("wrong password");
+      return;
+    }
+    const word = msgNFirst.replace(cmdPasswd, "");
+    const index = badWords.indexOf(word);
+    if (index > -1) {
+      badWords.splice(index, 1);
+
+      fs.writeFile("badWords.json", JSON.stringify(badWords), (err) => {
+        if (err) throw err;
+        console.log("badWords.json updated");
+      });
+      message.reply("bad word removed");
+    }
+  }
+
   if (msgFirst == "!set") {
-    // validation if sender is not me
-    if (!message.fromMe) {
-      message.reply("You are not allowed to use this command");
+    // using cmdPassword
+    if (!msgNFirst.includes(cmdPasswd)) {
+      message.reply("wrong password");
       return;
     }
 
@@ -227,5 +332,6 @@ client.on("message", async (message) => {
         console.error(error);
       });
   }
+
   message.react("👍");
 });
