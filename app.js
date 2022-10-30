@@ -114,6 +114,12 @@ client.on("message", async (message) => {
   var msgNFirst = message.body.substring(message.body.indexOf(" ") + 1);
 
   if (msgFirst == "!set") {
+    // validation if sender is not me
+    if (!message.fromMe) {
+      message.reply("You are not allowed to use this command");
+      return;
+    }
+
     if (!msgNFirst.includes("=>")) {
       message.reply("Invalid format");
       return;
