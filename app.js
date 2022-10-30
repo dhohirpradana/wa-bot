@@ -98,7 +98,7 @@ function calculate(input) {
 client.on("message", async (message) => {
   console.log(message);
   let chat = await message.getChat();
-  chat.sendSeen();
+  // chat.sendSeen();
 
   if (message.hasMedia) {
     const media = await message.downloadMedia();
