@@ -6,6 +6,7 @@ const fs = require("fs");
 const client = new Client({
   authStrategy: new LocalAuth(),
   // puppeteer: { headless: false },
+  puppeteer: { args: ["--no-sandbox"] },
 });
 
 client.initialize();
