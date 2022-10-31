@@ -199,9 +199,9 @@ client.on("message", async (message) => {
       function (err) {
         if (err) throw err;
         console.log("skipAuthors saved");
+        message.reply(`skipAuthors removed ${msgNFirst}`);
       }
     );
-    message.reply("skipAuthors removed", msgNFirst);
     return;
   }
 
