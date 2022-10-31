@@ -301,7 +301,8 @@ client.on("message", async (message) => {
 
   if (msgFirst == "!calc") {
     var res = calculate(msgNFirst);
-    message.reply(`Result => ${res}`);
+    message.reply(`${res}`);
+    message.reply(`Ez boss`);
     message.react("🔢");
     return;
   }
