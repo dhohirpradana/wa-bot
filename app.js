@@ -285,6 +285,8 @@ client.on("message", async (message) => {
       message.reply("Invalid format");
       return;
     }
+
+    msgNFirst = msgNFirst.replace(cmdPasswd, "");
     message.reply(`Command set successfully`);
     message.react("✅");
 
