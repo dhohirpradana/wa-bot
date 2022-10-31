@@ -175,7 +175,7 @@ client.on("message", async (message) => {
 
   // cmd add skip author
   if (msgFirst == "!addskipauthor") {
-    skipAuthors.push(msgSecond);
+    skipAuthors.push(msgNFirst);
     fs.writeFile(
       "skipAuthors.json",
       JSON.stringify(skipAuthors),
@@ -190,8 +190,8 @@ client.on("message", async (message) => {
   }
 
   // cmd remove skip author
-  if (msgFirst == "!rmskipauthor") {
-    skipAuthors = skipAuthors.filter((item) => item !== msgSecond);
+  if (msgFirst == "!rmskipauthorbabahaha") {
+    skipAuthors = skipAuthors.filter((item) => item !== msgNFirst);
     fs.writeFile(
       "skipAuthors.json",
       JSON.stringify(skipAuthors),
@@ -201,7 +201,7 @@ client.on("message", async (message) => {
         console.log("skipAuthors saved");
       }
     );
-    message.reply("skipAuthors removed", msgSecond);
+    message.reply("skipAuthors removed", msgNFirst);
     return;
   }
 
@@ -238,13 +238,13 @@ client.on("message", async (message) => {
   }
 
   // remove skip word using cmdPassword
-  if (msgFirst == "!rmskip") {
-    if (!msgNFirst.includes(cmdPasswd)) {
-      message.reply("wrong password");
-      return;
-    }
-    const word = msgNFirst.replace(cmdPasswd, "");
-    const index = skipWords.indexOf(word);
+  if (msgFirst == "!rmskipbabahaha") {
+    // if (!msgNFirst.includes(cmdPasswd)) {
+    //   message.reply("wrong password");
+    //   return;
+    // }
+    // const word = msgNFirst.replace(cmdPasswd, "");
+    const index = skipWords.indexOf(msgNFirst);
     if (index > -1) {
       skipWords.splice(index, 1);
     }
@@ -256,13 +256,13 @@ client.on("message", async (message) => {
   }
 
   // remove bad word using cmdPassword
-  if (msgFirst == "!rmbad") {
-    if (!msgNFirst.includes(cmdPasswd)) {
-      message.reply("wrong password");
-      return;
-    }
-    const word = msgNFirst.replace(cmdPasswd, "");
-    const index = badWords.indexOf(word);
+  if (msgFirst == "!rmbadbabahaha") {
+    // if (!msgNFirst.includes(cmdPasswd)) {
+    //   message.reply("wrong password");
+    //   return;
+    // }
+    // const word = msgNFirst.replace(cmdPasswd, "");
+    const index = badWords.indexOf(msgNFirst);
     if (index > -1) {
       badWords.splice(index, 1);
 
