@@ -158,7 +158,7 @@ client.on("message", async (message) => {
   }
 
   // skip if msgFirst is not a command
-  if (!msgFirst.contains("!rm")) {
+  if (!msgFirst.includes("!rm")) {
     // skip words
     if (matchSkipWords(message.body)) {
       console.log("skip");
